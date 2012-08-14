@@ -64,7 +64,7 @@ def join_images(path):
 
 def cleanup(path):
     """
-    Deletes temporaty files.
+    Deletes temporary files.
     """
     pass
 
