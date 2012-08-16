@@ -2,14 +2,17 @@
 """ monteger.py
 Creates montage images of every 10 seconds from the selected video file.
 Images are named as 'montage-...' and placed into same folder with the video.
-Usage: python montager.py file
-file: video file
+usage: montager.py [-h] file
 
-Examples: 
-montager.py poo.avi
-montager.py /usr/poo/poo.mp4
+positional arguments:
+  file        Video file
+
+optional arguments:
+  -h, --help  show this help message and exit
 """
+
 import sys
+import argparse
 
 class mediaI:
     """
@@ -69,13 +72,18 @@ def cleanup(path):
     pass
 
 def main():
-        path = sys.argv[1]
-        mi = mediaI(path)
-        extract_images(path)
-        create_montages(path)
-        create_header(path, mi)
-        join_images(path)
-        cleanup(path)
+        
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument("file", help="Video file")
+    args = argparser.parse_args()
+    path = args.file
+
+    mi = mediaI(path)
+    extract_images(path)
+    create_montages(path)
+    create_header(path, mi)
+    join_images(path)
+    cleanup(path)
         
 if __name__ == "__main__":
         main()
