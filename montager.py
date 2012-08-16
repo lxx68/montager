@@ -13,6 +13,7 @@ optional arguments:
 
 import sys
 import argparse
+import os.path
 
 class mediaI:
     """
@@ -77,7 +78,13 @@ def main():
     argparser.add_argument("file", help="Video file")
     args = argparser.parse_args()
     path = args.file
+    
+    if not os.path.exists(path):
+        sys.exit("File does not exist!")
 
+    if not os.path.isfile(path):
+        sys.exit("File is a folder!")
+        
     mi = mediaI(path)
     extract_images(path)
     create_montages(path)
@@ -87,4 +94,3 @@ def main():
         
 if __name__ == "__main__":
         main()
-
