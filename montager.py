@@ -14,6 +14,7 @@ optional arguments:
 import sys
 import argparse
 import os.path
+import subprocess
 
 class mediaI:
     """
@@ -29,7 +30,14 @@ class mediaI:
         Gets videofiles metadata in XML -format.
         Uses mediainfo.
         """
-        pass
+        try:
+           xml= subprocess.check_output(["mediainfo", "--Output=XML", path])
+        except CalledProcessError as e:
+            sys.exit(e.output)
+        except OSError as e:
+            sys.exit(e.strerror)
+
+        return xml
 
     def fill_variables(self, xml):
         """
