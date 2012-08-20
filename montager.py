@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" monteger.py
+""" montager.py
 Creates montage images of every 10 seconds from the selected video file.
 Images are named as 'montage-...' and placed into same folder with the video.
 usage: montager.py [-h] file
