@@ -9,4 +9,3 @@ MediaInfo
 ffmpeg
 ImageMagic
 Python Imaging Library
-python-elementtree

@@ -15,11 +15,15 @@ import sys
 import argparse
 import os.path
 import subprocess
+import xml.etree.ElementTree as ET
 
 class mediaI:
     """
     This class determines and stores the following metadata: aspect ratio and runtime. 
     """
+    
+    aspect_ratio = ""
+
     def __init__(self, path):
         xml = self.read_mediainfo(path)
         self.fill_variables(xml)
@@ -31,20 +35,20 @@ class mediaI:
         Uses mediainfo.
         """
         try:
-           xml= subprocess.check_output(["mediainfo", "--Output=XML", path])
+           data= subprocess.check_output(["mediainfo", path])
         except CalledProcessError as e:
             sys.exit(e.output)
         except OSError as e:
             sys.exit(e.strerror)
 
-        return xml
+        return data
 
-    def fill_variables(self, xml):
+    def fill_variables(self, data):
         """
-        Fills the member variables based on the XML.
-        Uses Elementtree- package.
+        Fills the member variables based on the data.
         """
-        pass
+        print data
+
 
 # the main program
 
