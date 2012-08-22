@@ -18,12 +18,13 @@ import subprocess
 
 class mediaI:
     """
-    This class determines and stores the following metadata: aspect ratio and runtime. 
+    This class determines and stores the following metadata: aspect ratio, duration and bitrate. 
     """
     
     aspect_ratio = ""
     duration_pr = ""   # printable version
     duration = 0       # in seconds
+    bit_rate = ""
 
     def __init__(self, path):
         xml = self.read_mediainfo(path)
@@ -89,6 +90,11 @@ class mediaI:
             self.duration = dur_min*60 + dur_sec
         else:
             self.duration = (dur_hour*60 + dur_min) * 60
+
+        # parse bitrate
+        br_start = data.find(":", data.find("Bit rate")) + 2 
+        br_end = data.find("\n",br_start)
+        self.bit_rate = data[br_start:br_end]
 
 # the main program
 
