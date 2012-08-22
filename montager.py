@@ -28,8 +28,8 @@ class mediaI:
     dimensions = ""
 
     def __init__(self, file):
-        xml = self.read_mediainfo(file)
-        self.fill_variables(xml)
+        data = self.read_mediainfo(file)
+        self.fill_variables(data)
         pass
 
     def read_mediainfo(self, file):
