@@ -27,17 +27,17 @@ class mediaI:
     bit_rate = ""
     dimensions = ""
 
-    def __init__(self, path):
-        xml = self.read_mediainfo(path)
+    def __init__(self, file):
+        xml = self.read_mediainfo(file)
         self.fill_variables(xml)
         pass
 
-    def read_mediainfo(self, path):
+    def read_mediainfo(self, file):
         """
         Uses mediainfo.
         """
         try:
-           data= subprocess.check_output(["mediainfo", path])
+           data= subprocess.check_output(["mediainfo", file])
         except CalledProcessError as e:
             sys.exit(e.output)
         except OSError as e:
@@ -112,7 +112,7 @@ class mediaI:
 
 # the main program
 
-def extract_images(path):
+def extract_images(path, filename):
     """
     Extracts a frame from the video file every 10 seconds.
     Uses ffmpeg.
@@ -149,16 +149,17 @@ def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument("file", help="Video file")
     args = argparser.parse_args()
-    path = args.file
+    file = args.file
+    (path, filename) = os.path.split(file)
     
-    if not os.path.exists(path):
+    if not os.path.exists(file):
         sys.exit("File does not exist!")
 
-    if not os.path.isfile(path):
+    if not os.path.isfile(file):
         sys.exit("File is a folder!")
         
-    mi = mediaI(path)
-    extract_images(path)
+    mi = mediaI(file)
+    extract_images(path, filename)
     create_montages(path)
     create_header(path, mi)
     join_images(path)
