@@ -15,7 +15,6 @@ import sys
 import argparse
 import os.path
 import subprocess
-import xml.etree.ElementTree as ET
 
 class mediaI:
     """
@@ -23,6 +22,8 @@ class mediaI:
     """
     
     aspect_ratio = ""
+    duration_pr = ""   # printable version
+    duration = 0       # in seconds
 
     def __init__(self, path):
         xml = self.read_mediainfo(path)
@@ -31,7 +32,6 @@ class mediaI:
 
     def read_mediainfo(self, path):
         """
-        Gets videofiles metadata in XML -format.
         Uses mediainfo.
         """
         try:
@@ -47,8 +47,48 @@ class mediaI:
         """
         Fills the member variables based on the data.
         """
-        print data
 
+        # parse aspect ratio
+        ar_start = data.find(":", data.find("Display aspect ratio")) + 2 
+        ar_end = data.find("\n",ar_start)
+        self.aspect_ratio = data[ar_start:ar_end]
+
+        # parse duration and duration_pr
+        # parse dur_raw
+        dur_raw_start = data.find(":", data.find("Duration")) + 2 
+        dur_raw_end = data.find("\n",dur_raw_start)
+        dur_raw = data[dur_raw_start:dur_raw_end]
+
+        self.duration_pr = dur_raw
+
+        # set hour flag
+        if dur_raw.find("h", 0) <> -1:
+            hour_flag = True
+        else:
+            hour_flag = False
+
+        # parse hours
+        if hour_flag:
+            dur_hour_end = data.find("h", dur_raw_start) 
+            dur_hour =  int(data[dur_raw_start:dur_hour_end])
+
+        # parse minutes
+        dur_min_end = data.find("m", dur_raw_start)
+        if not hour_flag:
+            dur_min = int(data[dur_raw_start:dur_min_end])
+        else:
+            dur_min = int(data[dur_hour_end+2:dur_min_end])
+
+        # parse seconds
+        if not hour_flag:
+            dur_sec_start = data.find(" ", dur_min_end) + 1
+            dur_sec = int(data[dur_sec_start:dur_raw_end - 1])
+
+        # calculate total duration in seconds
+        if not hour_flag:
+            self.duration = dur_min*60 + dur_sec
+        else:
+            self.duration = (dur_hour*60 + dur_min) * 60
 
 # the main program
 
