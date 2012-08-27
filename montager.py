@@ -136,11 +136,12 @@ def extract_images(path, filename):
     except OSError as e:
         sys.exit(e.strerror)
 
-def create_montages(path):
+def create_montages(path, mi):
     """
     Uses ImageMagick's montage -tool.
     """
     pass
+
 def create_header(path, mi):
     """
     Uses the Python Imaging Library. (PIL)
@@ -176,7 +177,7 @@ def main():
         
     mi = mediaI(file)
     extract_images(path, filename)
-    create_montages(path)
+    create_montages(path, mi)
     create_header(path, mi)
     join_images(path)
     cleanup(path)
