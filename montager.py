@@ -140,7 +140,75 @@ def create_montages(path, mi):
     """
     Uses ImageMagick's montage -tool.
     """
-    pass
+    # montage 47/*.jpeg -geometry $GEOM -tile $TILE 47/montage.jpg
+    
+    files = os.listdir(path)
+    files.sort()
+    counter = 0      # images
+    counter2 = 0     # montages
+    tile = "3x3"
+    param = []
+
+    if mi.aspect_ratio == "4:3":
+        geom = "480x360+2+2"
+    elif mi.aspect_ratio == "3:2":
+        geom  = "480x320+2+2"
+    else:
+        geom = "640x360+2+2"
+    
+    # remove the videofile from the list
+    for file in files:
+        if file.find("jpeg", 0) == -1:
+            files.pop(files.index(file))
+        
+    size = len(files)
+    n_mon = size/9
+    mod_mon = size % 9
+ 
+    # first create the full montages
+    while counter < n_mon*9:
+        # build the subprocess's parameterlist
+        param.append("montage")
+        for n in range(9):
+            param.append(os.path.join(path,files[counter]))
+            counter = counter + 1
+        param.append("-geometry")
+        param.append(geom)
+        param.append("-tile")
+        param.append(tile)
+        param.append(os.path.join(path, "montage-" + str(counter2) + ".jpg"))
+        counter2 = counter2 + 1;
+        
+        try:
+            subprocess.call(param)
+        except subprocess.CalledProcessError as e:
+            sys.exit(e.output)
+        except OSError as e:
+            sys.exit(e.strerror)
+        
+        param[:] = []
+    
+    # then the last
+    if mod_mon <> 0:
+        # build subprocess's paremeterlist
+        param.append("montage")
+        while counter < len(files):
+            param.append(os.path.join(path,files[counter]))
+            counter = counter + 1
+        param.append("-geometry")
+        param.append(geom)
+        param.append("-tile")
+        param.append(tile)
+        param.append(os.path.join(path, "montage-" + str(counter2) + ".jpg"))
+
+        try:
+            subprocess.call(param)
+        except subprocess.CalledProcessError as e:
+            sys.exit(e.output)
+        except OSError as e:
+            sys.exit(e.strerror)
+        
+        param[:] = []
 
 def create_header(path, mi):
     """
