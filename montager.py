@@ -117,14 +117,30 @@ def extract_images(path, filename):
     Extracts a frame from the video file every 10 seconds.
     Uses ffmpeg.
     """
-    pass
+    # ffmpeg -i infile -r framerate -f image2 outfile
+
+    infile = os.path.join(path, filename)
+    framerate = "0.1"
+    format = "image2"
+    output = path + "/image-%3d.jpeg"
+
+    try:
+       subprocess.call(["ffmpeg",
+                        "-i" ,infile, 
+                        "-r" ,framerate, 
+                        "-f", 
+                        format, 
+                        output])
+    except subprocess.CalledProcessError as e:
+        sys.exit(e.output)
+    except OSError as e:
+        sys.exit(e.strerror)
 
 def create_montages(path):
     """
     Uses ImageMagick's montage -tool.
     """
     pass
-
 def create_header(path, mi):
     """
     Uses the Python Imaging Library. (PIL)
