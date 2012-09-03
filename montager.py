@@ -21,6 +21,7 @@ class mediaI:
     This class determines and stores the following metadata: aspect ratio, duration, bitrate and dimensions. 
     """
     
+    filesize = 0
     aspect_ratio = ""
     duration_pr = ""   # printable version
     duration = 0       # in seconds
@@ -50,10 +51,15 @@ class mediaI:
         Fills the member variables based on the data.
         """
 
+        # parse filesize
+        fs_start = data.find(":", data.find("")) + 2 
+        fs_end = data.find("\n",fs_start)
+        self.filesize = data[fs_start:fs_end]
+
         # parse aspect ratio
-        ar_start = data.find(":", data.find("Display aspect ratio")) + 2 
-        ar_end = data.find("\n",ar_start)
-        self.aspect_ratio = data[ar_start:ar_end]
+        fs_start = data.find(":", data.find("File size")) + 2 
+        fs_end = data.find("\n",fs_start)
+        self.filesize = data[fs_start:fs_end]
 
         # parse duration and duration_pr
         # parse dur_raw
