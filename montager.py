@@ -15,6 +15,7 @@ import sys
 import argparse
 import os.path
 import subprocess
+import Image, ImageDraw, ImageFont
 
 class mediaI:
     """
@@ -216,13 +217,56 @@ def create_montages(path, mi):
         
         param[:] = []
 
-def create_header(path, mi):
+def create_header(filename, mi):
     """
     Uses the Python Imaging Library. (PIL)
     """
-    pass
+    
+    tab = 150
+    row = 17
+    y = 5
+    sy = 110
 
-def join_images(path):
+    # create the image
+    color = (255, 255, 255)
+    if mi.aspect_ratio == "3:2":
+        size = 1452, sy
+    elif mi.aspect_ratio == "4:3":
+        size = 1452, sy
+    else:
+        size = 1932, sy
+
+    header = Image.new("RGB", size, color)
+
+    # draw text into the image
+    draw = ImageDraw.Draw(header)
+    try:
+        font = ImageFont.load("courB10.pil")
+    except IOError as e:
+        print "Cannot find fonts!"
+        sys.exit(e.strerror)
+    
+    draw.text((5, y), "file", font = font, fill = "black")
+    draw.text((tab, y), ":" + filename, font = font, fill = "black")
+    y = y + row
+    draw.text((5, y), "filesize", font = font, fill = "black")
+    draw.text((tab, y), ":" + mi.filesize, font = font, fill = "black")
+    y = y + row
+    draw.text((5, y), "aspect ratio", font = font, fill = "black")
+    draw.text((tab, y), ":" + mi.aspect_ratio, font=font, fill = "black")
+    y = y + row
+    draw.text((5, y), "Dimensions", font = font, fill = "black")
+    draw.text((tab, y), ":" + mi.dimensions, font = font, fill = "black")
+    y = y + row
+    draw.text((5, y), "Bitrate", font = font, fill = "black")
+    draw.text((tab, y), ":" + mi.bit_rate, font = font, fill = "black")
+    y = y + row
+    draw.text((5, y), "Duration", font = font, fill = "black")
+    draw.text((tab, y), ":" + mi.duration_pr, font = font, fill = "black")
+
+    return header
+    
+def join_images(path, header):
     """
     Attaches the headerimage on top of the montages.
     Uses PIL.
@@ -242,7 +286,7 @@ def main():
     args = argparser.parse_args()
     file = args.file
     (path, filename) = os.path.split(file)
-    
+
     if not os.path.exists(file):
         sys.exit("File does not exist!")
 
@@ -252,8 +296,8 @@ def main():
     mi = mediaI(file)
     extract_images(path, filename)
     create_montages(path, mi)
-    create_header(path, mi)
-    join_images(path)
+    header= create_header(filename, mi)
+    join_images(path, header)
     cleanup(path)
         
 if __name__ == "__main__":
