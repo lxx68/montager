@@ -305,7 +305,12 @@ def cleanup(path):
     """
     Deletes temporary files.
     """
-    pass
+    
+    files = os.listdir(path)
+    
+    for file in files:
+        if file.find("image",0) <> -1 or file.find("mn-",0) <> -1:
+            os.remove(os.path.join(path, file))
 
 def main():
         
@@ -322,8 +327,8 @@ def main():
         sys.exit("File is a folder!")
         
     mi = mediaI(file)
-    #extract_images(path, filename)
-    #create_montages(path, mi)
+    extract_images(path, filename)
+    create_montages(path, mi)
     header= create_header(filename, mi)
     join_images(path, mi, header)
     cleanup(path)
