@@ -183,7 +183,7 @@ def create_montages(path, mi):
         param.append(geom)
         param.append("-tile")
         param.append(tile)
-        param.append(os.path.join(path, "montage-" + str(counter2) + ".jpg"))
+        param.append(os.path.join(path, "mn-" + str(counter2) + ".jpg"))
         counter2 = counter2 + 1;
         
         try:
@@ -206,7 +206,7 @@ def create_montages(path, mi):
         param.append(geom)
         param.append("-tile")
         param.append(tile)
-        param.append(os.path.join(path, "montage-" + str(counter2) + ".jpg"))
+        param.append(os.path.join(path, "mn-" + str(counter2) + ".jpg"))
 
         try:
             subprocess.call(param)
@@ -266,12 +266,40 @@ def create_header(filename, mi):
 
     return header
     
-def join_images(path, header):
+def join_images(path, mi, header):
     """
     Attaches the headerimage on top of the montages.
     Uses PIL.
     """
-    pass
+
+    counter = 0
+    h_y = 110 # header y-size
+    color = (255, 255, 255)
+
+    if mi.aspect_ratio == "3:2":
+        im_x = 1452
+        im_y = 972 + h_y
+    elif mi.aspect_ratio == "4:3":
+        im_x = 1452
+        im_y = 1092 + h_y
+    else:
+        im_x = 1932
+        im_y = 1092 + h_y
+
+    im_size = im_x, im_y
+
+    files = os.listdir(path)
+    files.sort()
+
+    # join header with montages
+    for file in files:
+        if file.find("mn", 0) <> -1:
+            im = Image.new("RGB", im_size, color)
+            mn = Image.open(os.path.join(path, file))
+            im.paste(header, (0,0))
+            im.paste(mn, (0, h_y + 1))
+            im.save(os.path.join(path, "montage-" + str(counter) + ".jpg"), "JPEG")
+            counter = counter + 1
 
 def cleanup(path):
     """
@@ -294,10 +322,10 @@ def main():
         sys.exit("File is a folder!")
         
     mi = mediaI(file)
-    extract_images(path, filename)
-    create_montages(path, mi)
+    #extract_images(path, filename)
+    #create_montages(path, mi)
     header= create_header(filename, mi)
-    join_images(path, header)
+    join_images(path, mi, header)
     cleanup(path)
         
 if __name__ == "__main__":
