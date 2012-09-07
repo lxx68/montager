@@ -296,10 +296,20 @@ def join_images(path, mi, header):
     for file in files:
         if file.find("mn", 0) <> -1:
             im = Image.new("RGB", im_size, color)
-            mn = Image.open(os.path.join(path, file))
+            try:
+                mn = Image.open(os.path.join(path, file))
+            except IOerror as e:
+                sys.exit(e.output)
+            except OSError as e:
+                sys.exit(e.strerror)
             im.paste(header, (0,0))
             im.paste(mn, (0, h_y + 1))
-            im.save(os.path.join(path, "montage-" + str(counter) + ".jpg"), "JPEG")
+            try:
+                im.save(os.path.join(path, "montage-" + str(counter) + ".jpg"), "JPEG")
+            except IOerror as e:
+                sys.exit(e.output)
+            except OSError as e:
+                sys.exit(e.strerror)
             counter = counter + 1
 
 def cleanup(path):
