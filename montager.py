@@ -331,6 +331,9 @@ def main():
     file = args.file
     (path, filename) = os.path.split(file)
 
+    if path == "":
+        path = "."
+
     if not os.path.exists(file):
         sys.exit("File does not exist!")
 
