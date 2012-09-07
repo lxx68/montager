@@ -113,8 +113,8 @@ class mediaI:
         he_end = data.find("\n",he_start)
         heigth = data[he_start:he_end]
 
-        wi_num = width[0:width.find(" ", 0)]    
-        he_num = heigth[0:heigth.find(" ", 0)]  
+        wi_num = width[0:width.find("p", 0) - 1]     
+        he_num = heigth[0:heigth.find("p", 0) - 1]  
         self.dimensions = wi_num + "x" + he_num + " pixels"
 
 # the main program
