@@ -183,7 +183,7 @@ def create_montages(path, mi):
         param.append(geom)
         param.append("-tile")
         param.append(tile)
-        param.append(os.path.join(path, "mn-" + str(counter2) + ".jpg"))
+        param.append(os.path.join(path, "montage-" + str(counter2) + ".jpg"))
         counter2 = counter2 + 1;
         
         try:
@@ -206,7 +206,7 @@ def create_montages(path, mi):
         param.append(geom)
         param.append("-tile")
         param.append(tile)
-        param.append(os.path.join(path, "mn-" + str(counter2) + ".jpg"))
+        param.append(os.path.join(path, "montage-" + str(counter2) + ".jpg"))
 
         try:
             subprocess.call(param)
@@ -294,7 +294,7 @@ def join_images(path, mi, header):
 
     # join header with montages
     for file in files:
-        if file.find("mn", 0) <> -1:
+        if file.find("montage", 0) <> -1:
             im = Image.new("RGB", im_size, color)
             try:
                 mn = Image.open(os.path.join(path, file))
@@ -305,7 +305,7 @@ def join_images(path, mi, header):
             im.paste(header, (0,0))
             im.paste(mn, (0, h_y + 1))
             try:
-                im.save(os.path.join(path, "montage-" + str(counter) + ".jpg"), "JPEG")
+                im.save(os.path.join(path, file), "JPEG")
             except IOerror as e:
                 sys.exit(e.output)
             except OSError as e:
@@ -320,7 +320,7 @@ def cleanup(path):
     files = os.listdir(path)
     
     for file in files:
-        if file.find("image",0) <> -1 or file.find("mn-",0) <> -1:
+        if file.find("image",0) <> -1:
             os.remove(os.path.join(path, file))
 
 def main():
