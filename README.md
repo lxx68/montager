@@ -9,4 +9,5 @@ MediaInfo
 ffmpeg
 ImageMagic
 Python Imaging Library
-pilfonts (courB10.pilm courB10.pbm)
+libfreetype6
+libfreetype6-dev

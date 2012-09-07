@@ -113,8 +113,8 @@ class mediaI:
         he_end = data.find("\n",he_start)
         heigth = data[he_start:he_end]
 
-        wi_num = width[0:width.find(" ", 0)]
-        he_num = heigth[0:heigth.find(" ", 0)]
+        wi_num = width[0:width.find(" ", 0)]    
+        he_num = heigth[0:heigth.find(" ", 0)]  
         self.dimensions = wi_num + "x" + he_num + " pixels"
 
 # the main program
@@ -222,6 +222,7 @@ def create_header(filename, mi):
     Uses the Python Imaging Library. (PIL)
     """
     
+    ff = "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf"
     tab = 150
     row = 17
     y = 5
@@ -241,9 +242,9 @@ def create_header(filename, mi):
     # draw text into the image
     draw = ImageDraw.Draw(header)
     try:
-        font = ImageFont.load("courB10.pil")
+        font = ImageFont.truetype(ff, 14)
     except IOError as e:
-        print "Cannot find fonts!"
+        print "Cannot find font: " + ff
         sys.exit(e.strerror)
     
     draw.text((5, y), "file", font = font, fill = "black")
