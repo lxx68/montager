@@ -137,7 +137,9 @@ def extract_images(path, filename):
                         "-r" ,framerate, 
                         "-f", 
                         format, 
-                        output])
+                        output],
+                        stdout=open('/dev/null', 'w'), 
+                        stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         sys.exit(e.output)
     except OSError as e:
