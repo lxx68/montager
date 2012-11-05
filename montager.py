@@ -100,7 +100,14 @@ class mediaI:
             self.duration = (dur_hour*60 + dur_min) * 60
 
         # parse bitrate
-        br_start = data.find(":", data.find("Bit rate")) + 2 
+        a_start = data.find("Audio")
+        brm_start = data.find(":", data.find("Bit rate mode"))
+
+        if brm_start > 0 and brm_start < a_start:
+            br_start = data.find(":", data.find("Bit rate", brm_start))+2
+        else:
+            br_start = data.find(":", data.find("Bit rate")) + 2 
+        
         br_end = data.find("\n",br_start)
         self.bit_rate = data[br_start:br_end]
 
