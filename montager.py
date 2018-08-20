@@ -15,7 +15,7 @@ import sys
 import argparse
 import os.path
 import subprocess
-import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 class mediaI:
     """
